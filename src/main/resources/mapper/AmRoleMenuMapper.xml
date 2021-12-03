@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.zjiali.api.mapper.AmRoleMenuMapper">
+  <resultMap id="BaseResultMap" type="cn.zjiali.api.model.entity.AmRoleMenu">
+    <!--@mbg.generated-->
+    <!--@Table am_role_menu-->
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <id column="role_id" jdbcType="BIGINT" property="roleId" />
+    <id column="menu_id" jdbcType="BIGINT" property="menuId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+   id, role_id, menu_id
+  </sql>
+</mapper>

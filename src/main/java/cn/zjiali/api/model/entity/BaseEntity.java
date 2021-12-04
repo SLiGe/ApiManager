@@ -3,7 +3,7 @@ package cn.zjiali.api.model.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author zJiaLi
@@ -25,7 +25,7 @@ public class BaseEntity {
      * 创建时间
      */
     @TableField(value = "create_time")
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 更新人
@@ -37,5 +37,5 @@ public class BaseEntity {
      * 更新时间
      */
     @TableField(value = "update_time")
-    private Date updateTime;
+    private LocalDateTime updateTime;
 }

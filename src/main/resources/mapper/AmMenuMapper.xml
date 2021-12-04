@@ -20,9 +20,27 @@
     <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  <resultMap id="MenuWithRole" type="cn.zjiali.api.model.entity.AmMenu" extends="BaseResultMap">
+    <collection property="roles" ofType="cn.zjiali.api.model.entity.AmRole">
+      <id column="role_id" jdbcType="BIGINT" property="roleId" />
+      <result column="code" jdbcType="VARCHAR" property="code" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="role_sort" jdbcType="INTEGER" property="roleSort" />
+      <result column="status" jdbcType="VARCHAR" property="status" />
+      <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+      <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+      <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+      <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+      <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </collection>
+  </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     menu_id, menu_name, parent_id, order_num, url, target, menu_type, visible, is_refresh, 
     perms, icon, create_by, create_time, update_by, update_time
   </sql>
+
+  <select id="selectAllMenuWithRole" resultMap="MenuWithRole">
+    select m.*,r.* from am_menu m,am_role_menu rm,am_role r where m.menu_id = rm.menu_id and rm.role_id = r.role_id order by m.order_num
+    </select>
 </mapper>

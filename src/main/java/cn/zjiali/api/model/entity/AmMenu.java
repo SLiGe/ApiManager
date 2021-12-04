@@ -4,13 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.List;
 
 /**
  * 菜单权限表
@@ -92,7 +88,8 @@ public class AmMenu extends BaseEntity {
     @TableField(value = "icon")
     private String icon;
 
-
+    @TableField(exist = false)
+    private List<AmRole> roles;
 
     public static final String COL_MENU_ID = "menu_id";
 

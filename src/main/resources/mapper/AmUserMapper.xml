@@ -27,4 +27,8 @@
     user_id, username, `password`, user_type, `name`, phone, sex, email, avatar, `enable`, 
     login_ip, login_date, remark, create_by, create_time, update_by, update_time
   </sql>
+
+  <select id="selectUserRoles" resultType="cn.zjiali.api.model.entity.AmRole">
+        select * from am_role where role_id in (select role_id from am_user_role where user_id = #{userId,jdbcType=BIGINT})
+    </select>
 </mapper>

@@ -4,13 +4,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
+
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * 用户表
@@ -26,7 +33,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "am_user")
-public class AmUser extends BaseEntity {
+public class AmUser extends BaseEntity implements UserDetails {
     /**
      * 用户ID
      */
@@ -105,6 +112,9 @@ public class AmUser extends BaseEntity {
     @TableField(value = "remark")
     private String remark;
 
+    @TableField(exist = false)
+    private List<AmRole> roles;
+
 
     public static final String COL_USER_ID = "user_id";
 
@@ -139,4 +149,47 @@ public class AmUser extends BaseEntity {
     public static final String COL_UPDATE_BY = "update_by";
 
     public static final String COL_UPDATE_TIME = "update_time";
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof AmUser) {
+            return this.username.equals(((AmUser) o).username);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.username.hashCode();
+    }
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> simpleGrantedAuthorityList = new ArrayList<>(this.roles.size());
+        for (AmRole role : this.roles) {
+            simpleGrantedAuthorityList.add(new SimpleGrantedAuthority(role.getCode()));
+        }
+        return simpleGrantedAuthorityList;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return "1".equals(this.enable);
+    }
 }

@@ -3,6 +3,7 @@ package cn.zjiali.api.service;
 import cn.zjiali.api.mapper.AmMenuMapper;
 import cn.zjiali.api.model.entity.AmMenu;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Service
 public class AmMenuService extends ServiceImpl<AmMenuMapper, AmMenu> {
 
+    @Cacheable(cacheNames = {"AllMenuWithRole"})
     public List<AmMenu> selectAllMenuWithRole(){
         return this.baseMapper.selectAllMenuWithRole();
     }

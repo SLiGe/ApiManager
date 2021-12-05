@@ -5,12 +5,25 @@ spring:
   datasource:
     hikari:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: root
-      password: 123456
+      username: api_manager
+      password: MAmTWpa2mwaWX5EH
       maximum-pool-size: 20
       minimum-idle: 10
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://127.0.0.1:3360/api_manager?useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://www.mysqldata.com:3306/api_manager?useUnicode=true&characterEncoding=UTF8&serverTimezone=Asia/Shanghai
+  thymeleaf:
+    cache: false
+  cache:
+    type: redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    connect-timeout: PT10S
+    timeout: PT10S
+  session:
+    store-type: redis
+    timeout: 86400
 
 mybatis-plus:
   configuration:

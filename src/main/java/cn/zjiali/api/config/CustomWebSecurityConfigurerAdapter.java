@@ -1,10 +1,10 @@
 package cn.zjiali.api.config;
 
+import cn.zjiali.api.constants.SecConstants;
 import cn.zjiali.api.model.entity.AmUser;
 import cn.zjiali.api.model.response.Result;
 import cn.zjiali.api.service.AmUserService;
 import cn.zjiali.api.utils.ResponseUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.*;
@@ -23,8 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
-
-import java.io.PrintWriter;
 
 /**
  * @author zJiaLi
@@ -96,7 +94,7 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .maximumSessions(1).sessionRegistry(sessionRegistry()).expiredSessionStrategy(event -> {
-                    ResponseUtil.out(event.getResponse(), Result.fail("您已在另一台设备登录，本次登录已下线!"));
+                    ResponseUtil.out(event.getResponse(), Result.fail(SecConstants.EXPIRED_SESSION_MSG));
                 }).maxSessionsPreventsLogin(true)
         //没有认证时，在这里处理结果，不要重定向
         /*.accessDeniedPage("")*/;
@@ -107,35 +105,26 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
     public LoginFilter loginFilter() throws Exception {
         LoginFilter loginFilter = new LoginFilter();
         loginFilter.setAuthenticationSuccessHandler((request, response, authentication) -> {
-                    response.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = response.getWriter();
                     AmUser amUser = (AmUser) authentication.getPrincipal();
                     amUser.setPassword(null);
-                    Result<AmUser> ok = Result.success("登录成功!", amUser);
-                    String s = new ObjectMapper().writeValueAsString(ok);
-                    out.write(s);
-                    out.flush();
-                    out.close();
+                    Result<AmUser> ok = Result.success(SecConstants.LOGIN_SUCCESS_MSG, amUser);
+                    ResponseUtil.out(response, ok);
                 }
         );
         loginFilter.setAuthenticationFailureHandler((request, response, exception) -> {
-                    response.setContentType("application/json;charset=utf-8");
-                    PrintWriter out = response.getWriter();
                     Result<Object> respBean = Result.fail(exception.getMessage());
                     if (exception instanceof LockedException) {
-                        respBean.setMessage("账户被锁定，请联系管理员!");
+                        respBean.setMessage(SecConstants.ACCOUNT_LOCKED_MSG);
                     } else if (exception instanceof CredentialsExpiredException) {
-                        respBean.setMessage("密码过期，请联系管理员!");
+                        respBean.setMessage(SecConstants.PWD_EXPIRED_MSG);
                     } else if (exception instanceof AccountExpiredException) {
-                        respBean.setMessage("账户过期，请联系管理员!");
+                        respBean.setMessage(SecConstants.ACCOUNT_EXPIRED_MSG);
                     } else if (exception instanceof DisabledException) {
-                        respBean.setMessage("账户被禁用，请联系管理员!");
+                        respBean.setMessage(SecConstants.ACCOUNT_DISABLED_MSG);
                     } else if (exception instanceof BadCredentialsException) {
-                        respBean.setMessage("用户名或者密码输入错误，请重新输入!");
+                        respBean.setMessage(SecConstants.BAD_CREDENTIALS_MSG);
                     }
-                    out.write(new ObjectMapper().writeValueAsString(respBean));
-                    out.flush();
-                    out.close();
+                    ResponseUtil.out(response, respBean);
                 }
         );
         loginFilter.setAuthenticationManager(authenticationManagerBean());

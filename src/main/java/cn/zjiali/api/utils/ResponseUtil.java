@@ -1,6 +1,5 @@
 package cn.zjiali.api.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,7 +14,7 @@ public class ResponseUtil {
     public static void out(HttpServletResponse response, Object data) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
-        out.write(new ObjectMapper().writeValueAsString(data));
+        out.write(JsonUtil.toJson(data));
         out.flush();
         out.close();
     }

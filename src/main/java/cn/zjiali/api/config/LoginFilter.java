@@ -1,7 +1,9 @@
 package cn.zjiali.api.config;
 
 import cn.zjiali.api.model.entity.AmUser;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import cn.zjiali.api.utils.JsonUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
@@ -21,6 +23,7 @@ import java.util.Map;
  * @author zJiaLi
  * @since 2021-12-04 10:38
  */
+@Slf4j
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
@@ -32,11 +35,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
             throw new AuthenticationServiceException(
                     "Authentication method not supported: " + request.getMethod());
         }
-        if (request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE) || request.getContentType().contains(MediaType.APPLICATION_JSON_UTF8_VALUE)) {
+        if (request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
             Map<String, String> loginData = new HashMap<>();
             try {
-                loginData = new ObjectMapper().readValue(request.getInputStream(), Map.class);
+                loginData = JsonUtil.parseMap(request.getInputStream());
             } catch (IOException e) {
+                log.error("登录信息解析失败: {}", ExceptionUtils.getStackTrace(e));
             }
             String username = loginData.get(getUsernameParameter());
             String password = loginData.get(getPasswordParameter());

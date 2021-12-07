@@ -24,7 +24,6 @@ spring:
   session:
     store-type: redis
     timeout: 86400
-
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl

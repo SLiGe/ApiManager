@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${site.siteName}">Title</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <style>
+        .site-header ul li {
+            padding-right: 25px;
+        }
+
+        .box-text {
+            padding: 46px;
+            text-align: center;
+        }
+
+        .box-text h1 {
+            text-shadow: -5px 5px 0 rgb(0 0 0 / 10%);
+        }
+
+        .box-text p {
+            margin-bottom: 15px;
+            margin-top: 5px;
+            font-size: 16px;
+            font-weight: 200;
+        }
+    </style>
+</head>
+<body>
+<header class="site-header">
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">首页</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">公告</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">关于</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">登录</a>
+        </li>
+    </ul>
+    <div class="box-text">
+        <h1>木小果API</h1>
+        <p>稳定、快速、免费的 API 接口服务<br>
+            <span class="package-amount">
+					    <!--(2020-10-27更新)-->
+					    共收录了 <strong>64 </strong> 个接口 • 今日调用 <strong id="tddy">11584</strong> 次
+					</span>
+        </p>
+        <!-- 搜索框 -->
+        <div class="search-wraper" role="search">
+            <div class="form-group">
+                <label for="api-search"></label><input class="form-control search clearable"
+                                                       placeholder="找不到想要的API？试试搜索吧！" autocomplete="off"
+                                                       autofocus="" tabindex="0" autocapitalize="off"
+                                                       spellcheck="false" id="api-search">
+                <i id="api-search-tu" class="fa fa-search"></i>
+            </div>
+        </div>
+    </div>
+</header>
+<script>
+
+</script>
+</body>
+</html>
